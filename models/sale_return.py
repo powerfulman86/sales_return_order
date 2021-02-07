@@ -36,13 +36,13 @@ class SaleReturn(models.Model):
     name = fields.Char(string='Order Reference', required=True, copy=False, readonly=True,
                        states={'draft': [('readonly', False)]}, index=True, default=lambda self: _('New'))
     origin = fields.Char(string='Source Document',
-                         help="Reference of the document that generated this sales order request.")
+                         help="Reference of the document that generated this Return order request.")
     client_order_ref = fields.Char(string='Customer Reference', copy=False)
     reference = fields.Char(string='Payment Ref.', copy=False,
                             help='The payment communication of this sale order.')
     state = fields.Selection([
         ('draft', 'Quotation'),
-        ('sale', 'Sales Order'),
+        ('sale', 'Return Order'),
         ('done', 'Locked'),
         ('cancel', 'Cancelled'),
     ], string='Status', readonly=True, copy=False, index=True, tracking=3, default='draft')
@@ -52,14 +52,7 @@ class SaleReturn(models.Model):
                                  help="Creation date of draft/sent orders,\nConfirmation date of confirmed orders.")
     validity_date = fields.Date(string='Expiration', readonly=True, copy=False,
                                 states={'draft': [('readonly', False)]}, )
-    is_expired = fields.Boolean(string="Is expired")
-    require_signature = fields.Boolean('Online Signature', readonly=True,
-                                       states={'draft': [('readonly', False)]},
-                                       help='Request a online signature to the customer in order to confirm orders automatically.')
-    require_payment = fields.Boolean('Online Payment', readonly=True,
-                                     states={'draft': [('readonly', False)]},
-                                     help='Request an online payment to the customer in order to confirm orders automatically.')
-    remaining_validity_days = fields.Integer(string="Remaining Days Before Expiration")
+
     create_date = fields.Datetime(string='Creation Date', readonly=True, index=True,
                                   help="Date on which sales order is created.")
 
@@ -71,23 +64,8 @@ class SaleReturn(models.Model):
         states={'draft': [('readonly', False)]},
         required=True, change_default=True, index=True, tracking=1,
         domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]", )
-    partner_invoice_id = fields.Many2one(
-        'res.partner', string='Invoice Address',
-        readonly=True,
-        states={'draft': [('readonly', False)], 'sale': [('readonly', False)]},
-        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]", )
-    partner_shipping_id = fields.Many2one(
-        'res.partner', string='Delivery Address', readonly=True,
-        states={'draft': [('readonly', False)], 'sale': [('readonly', False)]},
-        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]", )
 
     sale_id = fields.Many2one("sale.order", string="Sale Order")
-    analytic_account_id = fields.Many2one(
-        'account.analytic.account', 'Analytic Account',
-        readonly=True, copy=False, check_company=True,  # Unrequired company
-        states={'draft': [('readonly', False)]},
-        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
-        help="The analytic account related to a sales order.")
 
     order_line = fields.One2many('sale.return.line', 'order_id', string='Order Lines',
                                  states={'cancel': [('readonly', True)], 'done': [('readonly', True)]}, copy=True,
@@ -108,16 +86,6 @@ class SaleReturn(models.Model):
                                   tracking=5)
     amount_tax = fields.Float(string='Taxes', store=True, readonly=True, compute='_amount_all')
     amount_total = fields.Float(string='Total', store=True, readonly=True, compute='_amount_all', tracking=4)
-    payment_term_id = fields.Many2one(
-        'account.payment.term', string='Payment Terms', check_company=True,  # Unrequired company
-        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]", )
-    fiscal_position_id = fields.Many2one(
-        'account.fiscal.position', string='Fiscal Position',
-        domain="[('company_id', '=', company_id)]", check_company=True,
-        help="Fiscal positions are used to adapt taxes and accounts for particular customers or sales orders/invoices."
-             "The default value comes from the customer.")
-    company_id = fields.Many2one('res.company', 'Company', required=True, index=True,
-                                 default=lambda self: self.env.company)
 
     @api.model
     def _get_default_team(self):
@@ -128,21 +96,9 @@ class SaleReturn(models.Model):
         change_default=True, default=_get_default_team, check_company=True,  # Unrequired company
         domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]")
 
-    signature = fields.Image('Signature', help='Signature received through the portal.', copy=False, attachment=True,
-                             max_width=1024, max_height=1024)
-    signed_by = fields.Char('Signed By', help='Name of the person that signed the SO.', copy=False)
-    signed_on = fields.Datetime('Signed On', help='Date of the signature.', copy=False)
 
-    commitment_date = fields.Datetime('Delivery Date',
-                                      states={'draft': [('readonly', False)]},
-                                      copy=False, readonly=True,
-                                      help="This is the delivery date promised to the customer. "
-                                           "If set, the delivery order will be scheduled based on "
-                                           "this date rather than product lead times.")
-    expected_date = fields.Datetime("Expected Date", store=False,
-                                    # Note: can not be stored since depends on today()
-                                    help="Delivery date you can promise to the customer, computed from the minimum lead time of the order lines.")
-    amount_undiscounted = fields.Float('Amount Before Discount', digits=0)
+    company_id = fields.Many2one('res.company', default=lambda self: self.env.company)
+
 
     type_name = fields.Char('Type Name')
 
@@ -150,13 +106,11 @@ class SaleReturn(models.Model):
     def change_sale_id(self):
         lines = []
         self.partner_id = self.sale_id.partner_id.id
-        self.payment_term_id = self.sale_id.payment_term_id.id
         self.warehouse_id = self.sale_id.warehouse_id.id
         self.user_id = self.sale_id.user_id.id
         self.team_id = self.sale_id.team_id.id
         self.company_id = self.sale_id.company_id.id
         self.commitment_date = self.sale_id.commitment_date
-        self.fiscal_position_id = self.sale_id.fiscal_position_id
         self.client_order_ref = self.sale_id.client_order_ref
         for line in self.sale_id.order_line:
             values = {
@@ -212,10 +166,7 @@ class SaleReturn(models.Model):
             'invoice_user_id': self.user_id and self.user_id.id,
             'team_id': self.team_id.id,
             'partner_id': self.partner_id.id,
-            'partner_shipping_id': self.partner_shipping_id.id,
-            'fiscal_position_id': self.fiscal_position_id.id or self.partner_invoice_id.property_account_position_id.id,
             'invoice_origin': self.name,
-            'invoice_payment_term_id': self.payment_term_id.id,
             'invoice_payment_ref': self.reference,
             'invoice_line_ids': lines,
         }
@@ -232,17 +183,17 @@ class SaleReturn(models.Model):
         }
         result['domain'] = "[('id', 'in', " + str(self.move_ids.ids) + ")]"
         return result
-    #
+
     @api.model
     def _default_warehouse_id(self):
-        company = self.env.company.id
-        warehouse_ids = self.env['stock.warehouse'].search([('company_id', '=', company)], limit=1)
+        company = self.env.user.company_id.id
+        warehouse_ids = self.env['stock.warehouse'].search([], limit=1)
         return warehouse_ids
 
     warehouse_id = fields.Many2one(
         'stock.warehouse', string='Warehouse',
         required=True, readonly=True, states={'draft': [('readonly', False)]},
-        default=_default_warehouse_id, check_company=True)
+        default=_default_warehouse_id)
 
     picking_ids = fields.One2many('stock.picking', 'new_return_id', string='Transfers')
     move_ids = fields.One2many('account.move', 'new_return_id', string='Credit')
@@ -261,85 +212,10 @@ class SaleReturn(models.Model):
                     _('You can not delete a sent quotation or a confirmed return order. You must first cancel it.'))
         return super(SaleReturn, self).unlink()
 
-    @api.onchange('partner_shipping_id', 'partner_id')
-    def onchange_partner_shipping_id(self):
-        """
-        Trigger the change of fiscal position when the shipping address is modified.
-        """
-        self.fiscal_position_id = self.env['account.fiscal.position'].with_context(
-            force_company=self.company_id.id).get_fiscal_position(
-            self.partner_id.id,
-            self.partner_shipping_id.id)
-        return {}
-
-    @api.onchange('partner_id')
-    def onchange_partner_id(self):
-        """
-        Update the following fields when the partner is changed:
-        - Pricelist
-        - Payment terms
-        - Invoice address
-        - Delivery address
-        """
-        if not self.partner_id:
-            self.update({
-                'partner_invoice_id': False,
-                'partner_shipping_id': False,
-                'payment_term_id': False,
-                'fiscal_position_id': False,
-            })
-            return
-
-        addr = self.partner_id.address_get(['delivery', 'invoice'])
-        partner_user = self.partner_id.user_id or self.partner_id.commercial_partner_id.user_id
-        values = {
-            'payment_term_id': self.partner_id.property_payment_term_id and self.partner_id.property_payment_term_id.id or False,
-            'partner_invoice_id': addr['invoice'],
-            'partner_shipping_id': addr['delivery'],
-            'user_id': partner_user.id or self.env.uid
-        }
-        if self.env['ir.config_parameter'].sudo().get_param(
-                'account.use_invoice_terms') and self.env.company.invoice_terms:
-            values['note'] = self.with_context(lang=self.partner_id.lang).env.company.invoice_terms
-
-        # Use team of salesman if any otherwise leave as-is
-        values['team_id'] = partner_user.team_id.id if partner_user and partner_user.team_id else self.team_id
-        self.update(values)
-
     @api.onchange('user_id')
     def onchange_user_id(self):
         if self.user_id and self.user_id.sale_team_id:
             self.team_id = self.user_id.sale_team_id
-
-    @api.onchange('partner_id')
-    def onchange_partner_id_warning(self):
-        if not self.partner_id:
-            return
-        warning = {}
-        title = False
-        message = False
-        partner = self.partner_id
-
-        # If partner has no warning, check its company
-        if partner.sale_warn == 'no-message' and partner.parent_id:
-            partner = partner.parent_id
-
-        if partner.sale_warn and partner.sale_warn != 'no-message':
-            # Block if partner only has warning but parent company is blocked
-            if partner.sale_warn != 'block' and partner.parent_id and partner.parent_id.sale_warn == 'block':
-                partner = partner.parent_id
-            title = ("Warning for %s") % partner.name
-            message = partner.sale_warn_msg
-            warning = {
-                'title': title,
-                'message': message,
-            }
-            if partner.sale_warn == 'block':
-                self.update({'partner_id': False, 'partner_invoice_id': False, 'partner_shipping_id': False, })
-                return {'warning': warning}
-
-        if warning:
-            return {'warning': warning}
 
     @api.model
     def create(self, vals):
@@ -352,13 +228,6 @@ class SaleReturn(models.Model):
                     'sale.return', sequence_date=seq_date) or _('New')
             else:
                 vals['name'] = self.env['ir.sequence'].next_by_code('sale.return', sequence_date=seq_date) or _('New')
-
-        # Makes sure partner_invoice_id', 'partner_shipping_id' and 'pricelist_id' are defined
-        if any(f not in vals for f in ['partner_invoice_id', 'partner_shipping_id']):
-            partner = self.env['res.partner'].browse(vals.get('partner_id'))
-            addr = partner.address_get(['delivery', 'invoice'])
-            vals['partner_invoice_id'] = vals.setdefault('partner_invoice_id', addr['invoice'])
-            vals['partner_shipping_id'] = vals.setdefault('partner_shipping_id', addr['delivery'])
 
         result = super(SaleReturn, self).create(vals)
         return result
@@ -410,8 +279,6 @@ class SaleReturn(models.Model):
         if len(self) == 1:
             context.update({
                 'default_partner_id': self.partner_id.id,
-                'default_partner_shipping_id': self.partner_shipping_id.id,
-                'default_invoice_payment_term_id': self.payment_term_id.id,
                 'default_invoice_origin': self.mapped('name'),
                 'default_user_id': self.user_id.id,
             })
@@ -421,20 +288,18 @@ class SaleReturn(models.Model):
     def action_draft(self):
         orders = self.filtered(lambda s: s.state in ['cancel'])
         return orders.write({
-            'state': 'draft',
-            'signed_by': False,
-            'signed_on': False,
+            'state': 'draft', 
         })
 
     def action_cancel(self):
         return self.write({'state': 'cancel'})
 
     def action_done(self):
-        for order in self:
-            tx = order.sudo().transaction_ids.get_last_transaction()
-            if tx and tx.state == 'pending' and tx.acquirer_id.provider == 'transfer':
-                tx._set_transaction_done()
-                tx.write({'is_processed': True})
+        # for order in self:
+        #     tx = order.sudo().transaction_ids.get_last_transaction()
+        #     if tx and tx.state == 'pending' and tx.acquirer_id.provider == 'transfer':
+        #         tx._set_transaction_done()
+        #         tx.write({'is_processed': True})
         return self.write({'state': 'done'})
 
     def action_unlock(self):
@@ -446,11 +311,6 @@ class SaleReturn(models.Model):
             other documents. In this method, the SO are in 'sale' state (not yet 'done').
         """
         # create an analytic account if at least an expense product
-        for order in self:
-            if any([expense_policy not in [False, 'no'] for expense_policy in
-                    order.order_line.mapped('product_id.expense_policy')]):
-                if not order.analytic_account_id:
-                    order._create_analytic_account()
         self._create_stock()
         return True
 
@@ -561,10 +421,9 @@ class SaleReturn(models.Model):
             rec.credit_note_count = len(rec.move_ids.ids)
 
 
-
 class SaleReturnLine(models.Model):
     _name = 'sale.return.line'
-    _description = 'Sales Order Line'
+    _description = 'Rrturn Order Line'
     _order = 'order_id, sequence, id'
     _check_company_auto = True
 
@@ -603,27 +462,13 @@ class SaleReturnLine(models.Model):
 
     # M2M holding the values of product.attribute with create_variant field set to 'no_variant'
     # It allows keeping track of the extra_price associated to those attribute values and add them to the SO line description
-    product_no_variant_attribute_value_ids = fields.Many2many('product.template.attribute.value', string="Extra Values",
-                                                              ondelete='restrict')
-
-    qty_delivered_method = fields.Selection([
-        ('manual', 'Manual'),
-        ('analytic', 'Analytic From Expenses')
-    ], string="Method to update delivered qty", readonly=True,
-        help="According to product configuration, the delivered quantity can be automatically computed by mechanism :\n"
-             "  - Manual: the quantity is set manually on the line\n"
-             "  - Analytic From expenses: the quantity is the quantity sum from posted expenses\n"
-             "  - Timesheet: the quantity is the sum of hours recorded on tasks linked to this sale line\n"
-             "  - Stock Moves: the quantity comes from confirmed pickings\n")
-    qty_delivered = fields.Float('Delivered Quantity', copy=False, digits='Product Unit of Measure', default=0.0)
-    qty_delivered_manual = fields.Float('Delivered Manually', copy=False, digits='Product Unit of Measure', default=0.0)
-    qty_to_invoice = fields.Float(string='To Invoice Quantity', store=True, readonly=True,
-                                  digits='Product Unit of Measure')
-    qty_invoiced = fields.Float(string='Invoiced Quantity', store=True, readonly=True,
-                                digits='Product Unit of Measure')
 
     order_partner_id = fields.Many2one(related='order_id.partner_id', store=True, string='Customer', readonly=False)
     company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company)
+
+    @api.onchange('product_id')
+    def _onchange_product_id(self):
+        self.price_unit = self.product_id.list_price
 
     @api.depends('product_uom_qty', 'discount', 'price_unit', 'tax_id')
     def _compute_amount(self):
@@ -633,7 +478,7 @@ class SaleReturnLine(models.Model):
         for line in self:
             price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
             taxes = line.tax_id.compute_all(price, False, line.product_uom_qty, product=line.product_id,
-                                            partner=line.order_id.partner_shipping_id)
+                                            partner=line.order_id.partner_id)
             line.update({
                 'price_tax': sum(t.get('amount', 0.0) for t in taxes.get('taxes', [])),
                 'price_total': taxes['total_included'],

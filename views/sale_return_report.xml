@@ -31,8 +31,8 @@
             <search string="Sales Analysis">
                 <field name="date"/>
                 <filter string="Date" name="year" invisible="1" date="date" default_period="this_year"/>
-                <filter name="Quotations" string="Quotations" domain="[('state','=', 'draft')]"/>
-                <filter name="Sales" string="Sales Orders" domain="[('state','not in',('draft', 'cancel', 'sent'))]"/>
+                <filter name="Request" string="Request" domain="[('state','=', 'draft')]"/>
+                <filter name="Sales" string="Sales Return" domain="[('state','not in',('draft', 'cancel', 'sent'))]"/>
                 <separator/>
                 <field name="user_id"/>
                 <field name="team_id"/>
@@ -68,7 +68,7 @@
         <field name="res_model">sale.return.report</field>
         <field name="view_mode">graph,pivot</field>
         <field name="view_id"></field>  <!-- force empty -->
-        <field name="help">This report performs analysis on your quotations and sales return. Analysis check your sales
+        <field name="help">This report performs analysis on your Request and sales return. Analysis check your sales
             revenues and sort it by different group criteria (salesman, partner, product, etc.) Use this report to
             perform analysis on sales not having invoiced yet. If you want to analyse your turnover, you should use the
             Invoice Analysis report in the Accounting application.</field>

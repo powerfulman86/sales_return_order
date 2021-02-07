@@ -7,7 +7,7 @@ from odoo import api, fields, models
 
 class SaleReturnReport(models.Model):
     _name = "sale.return.report"
-    _description = "Sales Return Analysis Report"
+    _description = "Return Return Analysis Report"
     _auto = False
     _rec_name = 'date'
     _order = 'date desc'
@@ -34,15 +34,14 @@ class SaleReturnReport(models.Model):
     product_tmpl_id = fields.Many2one('product.template', 'Product', readonly=True)
     categ_id = fields.Many2one('product.category', 'Product Category', readonly=True)
     nbr = fields.Integer('# of Lines', readonly=True)
-    analytic_account_id = fields.Many2one('account.analytic.account', 'Analytic Account', readonly=True)
     team_id = fields.Many2one('crm.team', 'Sales Team', readonly=True)
     country_id = fields.Many2one('res.country', 'Customer Country', readonly=True)
     industry_id = fields.Many2one('res.partner.industry', 'Customer Industry', readonly=True)
     commercial_partner_id = fields.Many2one('res.partner', 'Customer Entity', readonly=True)
     state = fields.Selection([
         ('draft', 'Draft Quotation'),
-        ('sale', 'Sales Order'),
-        ('done', 'Sales Done'),
+        ('sale', 'Return Order'),
+        ('done', 'Return Done'),
         ('cancel', 'Cancelled'),
         ], string='Status', readonly=True)
     weight = fields.Float('Gross Weight', readonly=True)
@@ -77,8 +76,7 @@ class SaleReturnReport(models.Model):
             s.medium_id as medium_id,
             s.source_id as source_id,
             extract(epoch from avg(date_trunc('day',s.date_order)-date_trunc('day',s.create_date)))/(24*60*60)::decimal(16,2) as delay,
-            t.categ_id as categ_id, 
-            s.analytic_account_id as analytic_account_id,
+            t.categ_id as categ_id,  
             s.team_id as team_id,
             p.product_tmpl_id,
             partner.country_id as country_id,
@@ -118,8 +116,7 @@ class SaleReturnReport(models.Model):
             s.company_id,
             s.campaign_id,
             s.medium_id,
-            s.source_id, 
-            s.analytic_account_id,
+            s.source_id,  
             s.team_id,
             p.product_tmpl_id,
             partner.country_id,

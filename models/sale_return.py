@@ -55,6 +55,7 @@ class SaleReturn(models.Model):
 
     create_date = fields.Datetime(string='Creation Date', readonly=True, index=True,
                                   help="Date on which sales order is created.")
+    credit_note_done = fields.Boolean()
 
     user_id = fields.Many2one(
         'res.users', string='Salesperson', index=True, tracking=2, default=lambda self: self.env.user,
@@ -182,6 +183,7 @@ class SaleReturn(models.Model):
             'default_new_return_id': self.id,
         }
         result['domain'] = "[('id', 'in', " + str(self.move_ids.ids) + ")]"
+        self.credit_note_done = True
         return result
 
     @api.model
@@ -288,7 +290,7 @@ class SaleReturn(models.Model):
     def action_draft(self):
         orders = self.filtered(lambda s: s.state in ['cancel'])
         return orders.write({
-            'state': 'draft', 
+            'state': 'draft',
         })
 
     def action_cancel(self):
@@ -340,7 +342,7 @@ class SaleReturn(models.Model):
             'partner_id': self.partner_id.id,
             'origin': self.name,
             'scheduled_date': fields.Date.today(),
-            'picking_type_id': self.env['stock.picking.type'].search([('code', '=', 'outgoing')])[0].id,
+            'picking_type_id': self.env['stock.picking.type'].search([('code', '=', 'incoming')])[0].id,
             'location_dest_id': self.warehouse_id.lot_stock_id.id,
             'location_id': self.env['stock.location'].search([('usage', '=', 'customer')])[0].id,
         })

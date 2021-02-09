@@ -36,8 +36,10 @@
                         <button name="action_confirm"
                                 string="Confirm" type="object"
                                 attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>
-                        <button name="action_cancel" states="draft,sent,sale" type="object" string="Cancel"/>
-                        <button name="create_credit_note" states="sale" type="object" string="Create Credit Note"/>
+                        <button name="action_cancel" attrs="{'invisible': [('credit_note_done', '=', True)]}" type="object" string="Cancel"/>
+                        <field name="credit_note_done" invisible="1"/>
+                        <button name="create_credit_note" type="object"
+                                attrs="{'invisible': ['|',('credit_note_done', '=', True),('state', '=', 'draft')]}" string="Create Credit Note"/>
                         <button name="action_draft" states="cancel" type="object" string="Set to Request"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,sent,sale"/>
                     </header>

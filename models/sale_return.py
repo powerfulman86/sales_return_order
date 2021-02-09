@@ -139,8 +139,8 @@ class SaleReturn(models.Model):
 
     def create_credit_note(self):
         self.ensure_one()
-        journal = self.env['account.move'].with_context(force_company=self.company_id.id,
-                                                        default_type='out_refund')._get_default_journal()
+
+        journal = self.env['account.journal'].search([('type', '=', 'sale')], limit=1)
         if not journal:
             raise UserError(_('Please define an accounting sales journal for the company %s (%s).') % (
             self.company_id.name, self.company_id.id))

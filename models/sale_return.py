@@ -42,7 +42,7 @@ class SaleReturn(models.Model):
                             help='The payment communication of this sale order.')
     state = fields.Selection([
         ('draft', 'Quotation'),
-        ('sale', 'Return Order'),
+        ('return', 'Return Order'),
         ('done', 'Locked'),
         ('cancel', 'Cancelled'),
     ], string='Status', readonly=True, copy=False, index=True, tracking=3, default='draft')
@@ -305,7 +305,7 @@ class SaleReturn(models.Model):
         return self.write({'state': 'done'})
 
     def action_unlock(self):
-        self.write({'state': 'sale'})
+        self.write({'state': 'return'})
 
     def _action_confirm(self):
         """ Implementation of additionnal mecanism of Sales Order confirmation.
@@ -325,7 +325,7 @@ class SaleReturn(models.Model):
         for order in self.filtered(lambda order: order.partner_id not in order.message_partner_ids):
             order.message_subscribe([order.partner_id.id])
         self.write({
-            'state': 'sale',
+            'state': 'return',
             'date_order': fields.Datetime.now()
         })
         self._action_confirm()
@@ -356,6 +356,7 @@ class SaleReturn(models.Model):
                 'location_id': self.env['stock.location'].search([('usage', '=', 'customer')])[0].id,
                 'product_uom': line.product_id.uom_id.id,
             })
+            picking_id.action_confirm()
         self.picking_ids = [(6, 0, [picking_id.id])]
 
     def action_view_receipt(self):

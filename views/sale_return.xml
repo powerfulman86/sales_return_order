@@ -57,7 +57,7 @@
                                     name="action_view_credit_note"
                                     class="oe_stat_button"
                                     icon="fa-truck"
-                                    attrs="{'invisible': [('state', '!=', 'sale')]}" groups="base.group_user">
+                                    groups="base.group_user">
                                 <field name="credit_note_count" widget="statinfo" string="Credit Notes"/>
                             </button>
                         </div>
@@ -76,18 +76,18 @@
 <!--                                       context="{'default_type':'delivery'}" options='{"always_reload": True}'/>-->
                             </group>
                             <group>
-                                <field name="validity_date" attrs="{'invisible': [('state', 'in', ['sale', 'done'])]}"/>
+                                <field name="validity_date" attrs="{'invisible': [('state', 'in', ['return', 'done'])]}"/>
                                 <div class="o_td_label" groups="base.group_no_one"
-                                     attrs="{'invisible': [('state', 'in', ['sale', 'done', 'cancel'])]}">
+                                     attrs="{'invisible': [('state', 'in', ['return', 'done', 'cancel'])]}">
                                     <label for="date_order" string="Request Date"/>
                                 </div>
                                 <field name="date_order" nolabel="1" groups="base.group_no_one"
-                                       attrs="{'invisible': [('state', 'in', ['sale', 'done', 'cancel'])]}"/>
+                                       attrs="{'invisible': [('state', 'in', ['return', 'done', 'cancel'])]}"/>
                                 <div class="o_td_label" attrs="{'invisible': [('state', 'in', ['draft', 'sent'])]}">
                                     <label for="date_order" string="Order Date"/>
                                 </div>
                                 <field name="date_order"
-                                       attrs="{'required': [('state', 'in', ['sale', 'done'])], 'invisible': [('state', 'in', ['draft', 'sent'])]}"
+                                       attrs="{'required': [('state', 'in', ['return', 'done'])], 'invisible': [('state', 'in', ['draft', 'sent'])]}"
                                        nolabel="1"/>
                             </group>
                         </group>
@@ -155,7 +155,7 @@
                                                 name="tax_id"
                                                 widget="many2many_tags"
                                                 options="{'no_create': True}"
-                                                domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]"
+                                                domain="[('type_tax_use','=','return'),('company_id','=',parent.company_id)]"
                                                 optional="show"
                                         />
                                         <field name="discount" string="Disc.%"

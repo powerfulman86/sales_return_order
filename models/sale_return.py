@@ -377,7 +377,7 @@ class SaleReturn(models.Model):
                 action['views'] = form_view
             action['res_id'] = pickings.id
         # Prepare the context.
-        picking_id = pickings.filtered(lambda l: l.picking_type_id.code == 'outgoing')
+        picking_id = pickings.filtered(lambda l: l.picking_type_id.code == 'incoming')
         if picking_id:
             picking_id = picking_id[0]
         else:

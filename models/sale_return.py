@@ -163,7 +163,6 @@ class SaleReturn(models.Model):
             'type': 'out_refund',
             'new_return_id': self.id,
             'narration': self.note,
-            'currency_id': self.user_id.company_id.currency_id.id,
             'invoice_user_id': self.user_id and self.user_id.id,
             'team_id': self.team_id.id,
             'partner_id': self.partner_id.id,
@@ -172,18 +171,18 @@ class SaleReturn(models.Model):
             'invoice_line_ids': lines,
         }
         invoice_id = self.env['account.move'].create(invoice_vals)
-        self.action_view_credit_note()
-        action = self.env.ref('account.action_move_out_refund_type')
-        result = action.read()[0]
-
-        # create_bill = self.env.context.get('create_bill', False)
-        # override the context to get rid of the default filtering
-        result['context'] = {
-            'default_is_company': True,
-            'default_new_return_id': self.id,
-        }
-        result['domain'] = "[('id', 'in', " + str(self.move_ids.ids) + ")]"
+        self.invoice_ids = [(6, 0, [invoice_id.id])]
+        view_id = self.env.ref('account.view_move_form').id
         self.credit_note_done = True
+        return {
+            'name': _('View Credit Note'),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'target': 'current',
+            'res_model': 'account.move',
+            'view_id': view_id,
+            'res_id': invoice_id.id
+        }
         return result
 
     @api.model
@@ -389,26 +388,17 @@ class SaleReturn(models.Model):
         return action
 
     def action_view_credit_note(self):
-        action = self.env.ref('account.action_move_out_refund_type')
-        result = action.read()[0]
-
-        # create_bill = self.env.context.get('create_bill', False)
-        # override the context to get rid of the default filtering
-        result['context'] = {
-            'default_is_company': True,
-            'default_new_return_id': self.id,
+        view_id = self.env.ref('account.view_move_form').id
+        print(">>>>>>>>>>>>>> ", self.invoice_ids.id)
+        return {
+            'name': _('View Credit Note'),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'target': 'current',
+            'res_model': 'account.move',
+            'view_id': view_id,
+            'res_id': self.invoice_ids[0].id
         }
-        # choose the view_mode accordingly
-        if len(self.move_ids) >= 1:
-            result['domain'] = "[('id', 'in', " + str(self.move_ids.ids) + ")]"
-        else:
-            res = self.env.ref('account.view_move_form', False)
-            form_view = [(res and res.id or False, 'form')]
-            if 'views' in result:
-                result['views'] = form_view + [(state, view) for state, view in action['views'] if view != 'form']
-            else:
-                result['views'] = form_view
-        return result
 
     receipts_count = fields.Integer(string='Receipt Orders', compute='_compute_picking_ids')
     credit_note_count = fields.Integer(string='Credit notes', compute='_compute_credit_note')

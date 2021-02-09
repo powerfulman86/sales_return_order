@@ -57,6 +57,7 @@
                                     name="action_view_credit_note"
                                     class="oe_stat_button"
                                     icon="fa-truck"
+                                    attrs="{'invisible': [('credit_note_done', '=', False)]}"
                                     groups="base.group_user">
                                 <field name="credit_note_count" widget="statinfo" string="Credit Notes"/>
                             </button>

@@ -36,13 +36,16 @@
                         <button name="action_confirm"
                                 string="Confirm" type="object"
                                 attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>
-                        <button name="action_cancel" attrs="{'invisible': [('credit_note_done', '=', True)]}" type="object" string="Cancel"/>
+                        <button name="action_cancel" attrs="{'invisible': [('credit_note_done', '=', True)]}"
+                                type="object" string="Cancel"/>
                         <field name="credit_note_done" invisible="1"/>
+                        <field name="picking_delivered" invisible="1"/>
 
                         <button name="action_view_receipt" type="object" string="receive products"
-                                attrs="{'invisible': [('state', 'in', ['draft'])]}"/>
+                                attrs="{'invisible': ['|',('state', 'in', ['draft']),('picking_delivered', '=', True)]}"/>
                         <button name="create_credit_note" type="object"
-                                attrs="{'invisible': ['|',('credit_note_done', '=', True),('state', '=', 'draft')]}" string="Create Credit Note"/>
+                                attrs="{'invisible': ['|',('credit_note_done', '=', True),('state', '=', 'draft')]}"
+                                string="Create Credit Note"/>
                         <button name="action_draft" states="cancel" type="object" string="Set to Request"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,sent,sale"/>
                     </header>
@@ -72,15 +75,16 @@
                         </div>
                         <group>
                             <group>
-                                <field name="sale_id" />
-                                <field name="partner_id" />
-<!--                                <field name="partner_invoice_id" groups="sale.group_delivery_invoice_address"-->
-<!--                                       context="{'default_type':'invoice'}" options='{"always_reload": True}'/>-->
-<!--                                <field name="partner_shipping_id" groups="sale.group_delivery_invoice_address"-->
-<!--                                       context="{'default_type':'delivery'}" options='{"always_reload": True}'/>-->
+                                <field name="sale_id"/>
+                                <field name="partner_id"/>
+                                <!--                                <field name="partner_invoice_id" groups="sale.group_delivery_invoice_address"-->
+                                <!--                                       context="{'default_type':'invoice'}" options='{"always_reload": True}'/>-->
+                                <!--                                <field name="partner_shipping_id" groups="sale.group_delivery_invoice_address"-->
+                                <!--                                       context="{'default_type':'delivery'}" options='{"always_reload": True}'/>-->
                             </group>
                             <group>
-                                <field name="validity_date" attrs="{'invisible': [('state', 'in', ['return', 'done'])]}"/>
+                                <field name="validity_date"
+                                       attrs="{'invisible': [('state', 'in', ['return', 'done'])]}"/>
                                 <div class="o_td_label" groups="base.group_no_one"
                                      attrs="{'invisible': [('state', 'in', ['return', 'done', 'cancel'])]}">
                                     <label for="date_order" string="Request Date"/>
@@ -219,7 +223,7 @@
                                                             </div>
                                                         </div>
                                                     </t>
-                                                 </div>
+                                                </div>
                                             </t>
                                         </templates>
                                     </kanban>
@@ -229,8 +233,8 @@
                                         <field name="note" nolabel="1" placeholder="Terms and conditions..."/>
                                     </group>
                                     <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
-<!--                                        <field name="amount_untaxed" widget='monetary'/>-->
-<!--                                        <field name="amount_tax" widget='monetary'/>-->
+                                        <!--                                        <field name="amount_untaxed" widget='monetary'/>-->
+                                        <!--                                        <field name="amount_tax" widget='monetary'/>-->
                                         <div class="oe_subtotal_footer_separator oe_inline o_td_label">
                                             <label for="amount_total"/>
                                         </div>
@@ -252,28 +256,28 @@
                                                attrs="{'invisible': [('reference', '=', False)]}"/>
                                         <field name="client_order_ref"/>
                                     </group>
-<!--                                    <group name="sale_info" string="Invoicing">-->
-<!--                                        <field name="fiscal_position_id" options="{'no_create': True}"/>-->
-<!--                                        <field name="analytic_account_id"-->
-<!--                                               context="{'default_partner_id':partner_invoice_id, 'default_name':name}"-->
-<!--                                               attrs="{'readonly': [('invoice_count','!=',0),('state','=','sale')]}"-->
-<!--                                               groups="analytic.group_analytic_accounting" force_save="1"/>-->
-<!--                                    </group>-->
+                                    <!--                                    <group name="sale_info" string="Invoicing">-->
+                                    <!--                                        <field name="fiscal_position_id" options="{'no_create': True}"/>-->
+                                    <!--                                        <field name="analytic_account_id"-->
+                                    <!--                                               context="{'default_partner_id':partner_invoice_id, 'default_name':name}"-->
+                                    <!--                                               attrs="{'readonly': [('invoice_count','!=',0),('state','=','sale')]}"-->
+                                    <!--                                               groups="analytic.group_analytic_accounting" force_save="1"/>-->
+                                    <!--                                    </group>-->
                                 </group>
                                 <group>
-<!--                                    <group name="sale_shipping">-->
-<!--                                        <label for="commitment_date" string="Delivery Date"/>-->
-<!--                                        <div class="o_row">-->
-<!--                                            <field name="commitment_date"/> <span class="text-muted">Expected: <field-->
-<!--                                                name="expected_date" widget="date"/></span>-->
-<!--                                        </div>-->
-<!--                                    </group>-->
-<!--                                    <group string="Reporting" name="sale_reporting" groups="base.group_no_one">-->
-<!--                                        <group name="technical" colspan="2" class="mb-0">-->
-<!--                                            <field name="origin"/>-->
-<!--                                        </group>-->
-<!--                                        <group name="utm_link" colspan="2"/>-->
-<!--                                    </group>-->
+                                    <!--                                    <group name="sale_shipping">-->
+                                    <!--                                        <label for="commitment_date" string="Delivery Date"/>-->
+                                    <!--                                        <div class="o_row">-->
+                                    <!--                                            <field name="commitment_date"/> <span class="text-muted">Expected: <field-->
+                                    <!--                                                name="expected_date" widget="date"/></span>-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </group>-->
+                                    <!--                                    <group string="Reporting" name="sale_reporting" groups="base.group_no_one">-->
+                                    <!--                                        <group name="technical" colspan="2" class="mb-0">-->
+                                    <!--                                            <field name="origin"/>-->
+                                    <!--                                        </group>-->
+                                    <!--                                        <group name="utm_link" colspan="2"/>-->
+                                    <!--                                    </group>-->
                                 </group>
                             </page>
                         </notebook>

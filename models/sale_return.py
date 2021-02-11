@@ -56,6 +56,7 @@ class SaleReturn(models.Model):
     create_date = fields.Datetime(string='Creation Date', readonly=True, index=True,
                                   help="Date on which sales order is created.")
     credit_note_done = fields.Boolean()
+    picking_delivered = fields.Boolean(compute="_compute_picking_ids")
 
     user_id = fields.Many2one(
         'res.users', string='Salesperson', index=True, tracking=2, default=lambda self: self.env.user,
@@ -313,6 +314,14 @@ class SaleReturn(models.Model):
         """
         # create an analytic account if at least an expense product
         self._create_stock()
+        if self.sale_id:
+            for line in self.order_line:
+                for s_line in self.sale_id.order_line:
+                    if line.product_id == s_line.product_id and line.product_uom_qty > s_line.product_uom_qty:
+                        raise ValidationError(_(
+                            "Can not return Quantity more than [ %s ] sold for product [ %s ]" % (
+                            s_line.product_uom_qty, line.product_id.name)))
+
         return True
 
     def action_confirm(self):
@@ -407,6 +416,14 @@ class SaleReturn(models.Model):
     def _compute_picking_ids(self):
         for rec in self:
             rec.receipts_count = len(rec.picking_ids)
+            if rec.picking_ids:
+                for pick in rec.picking_ids:
+                    if pick.state == 'done':
+                        rec.picking_delivered = True
+                    else:
+                        rec.picking_delivered = False
+            else:
+                rec.picking_delivered = False
 
     @api.depends('move_ids')
     def _compute_credit_note(self):
@@ -445,8 +462,8 @@ class SaleReturnLine(models.Model):
     product_template_id = fields.Many2one(
         'product.template', string='Product Template',
         related="product_id.product_tmpl_id", domain=[('sale_ok', '=', True)])
-    product_updatable = fields.Boolean(string='Can Edit Product', readonly=True,
-                                       default=True)
+    product_updatable = fields.Boolean(string='Can Edit Product', readonly=True,  default=True)
+
     product_uom_qty = fields.Float(string='Quantity', digits='Product Unit of Measure', required=False, default=1.0)
     product_uom = fields.Many2one('uom.uom', string='Unit of Measure',
                                   domain="[('category_id', '=', product_uom_category_id)]")

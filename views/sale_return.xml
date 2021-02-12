@@ -326,7 +326,7 @@
         </record>
 
         <menuitem id="sales_return_root" name="Return" parent="sale.sale_menu_root" sequence="3"/>
-        <menuitem id="return_quotation_menu" name="Return request" parent="sales_return_root"
+        <menuitem id="return_quotation_menu" name="Return Request" parent="sales_return_root"
                   action="action_quotations_sale_return" sequence="10"/>
         <menuitem id="return_order_menu" name="Sales Return" parent="sales_return_root"
                   action="action_return_orders" sequence="11"/>

@@ -292,7 +292,7 @@
         </record>
 
         <record id="action_quotations_sale_return" model="ir.actions.act_window">
-            <field name="name">Requests</field>
+            <field name="name">Return Requests</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">sale.return</field>
             <field name="view_id" ref="sale_return_view_tree"/>
@@ -325,9 +325,10 @@
             </field>
         </record>
 
-        <menuitem id="return_quotation_menu" name="Sale Return request" parent="sale.sale_order_menu"
+        <menuitem id="sales_return_root" name="Return" parent="sale.sale_menu_root" sequence="3"/>
+        <menuitem id="return_quotation_menu" name="Return Request" parent="sales_return_root"
                   action="action_quotations_sale_return" sequence="10"/>
-        <menuitem id="return_order_menu" name="Sale Return" parent="sale.sale_order_menu"
+        <menuitem id="return_order_menu" name="Sales Return" parent="sales_return_root"
                   action="action_return_orders" sequence="11"/>
     </data>
 </odoo>

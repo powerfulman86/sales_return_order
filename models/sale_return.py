@@ -119,6 +119,7 @@ class SaleReturn(models.Model):
                 'product_id': line.product_id.id,
                 'name': line.name,
                 'product_uom_qty': line.product_uom_qty,
+                'product_uom': line.product_uom.id,
                 'price_unit': line.price_unit,
                 'tax_id': [(6, 0, line.tax_id.ids)],
             }
@@ -439,7 +440,7 @@ class SaleReturnLine(models.Model):
 
     order_id = fields.Many2one('sale.return', string='Order Reference', required=False, ondelete='cascade', index=True,
                                copy=False)
-    name = fields.Text(string='Description', required=False)
+    name = fields.Text(string='Description', required=True)
     sequence = fields.Integer(string='Sequence', default=10)
 
     invoice_lines = fields.Many2many('account.move.line', 'sale_return_line_invoice_rel', 'order_line_id',
@@ -479,6 +480,8 @@ class SaleReturnLine(models.Model):
     @api.onchange('product_id')
     def _onchange_product_id(self):
         self.price_unit = self.product_id.list_price
+        self.product_uom = self.product_id.uom_id.id
+        self.name = self.product_id.name
 
     @api.depends('product_uom_qty', 'discount', 'price_unit', 'tax_id')
     def _compute_amount(self):

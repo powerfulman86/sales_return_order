@@ -14,6 +14,7 @@
         'views/sale_return_report.xml',
         'views/sale_net_report.xml',
         'views/sale_net_product_detail_report.xml',
+        'views/setting.xml',
     ],
 
 }

@@ -73,7 +73,13 @@ class SaleReturn(models.Model):
                                  states={'cancel': [('readonly', True)], 'done': [('readonly', True)]}, copy=True,
                                  auto_join=True)
     company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company)
-
+    analytic_account_id = fields.Many2one('account.analytic.account', string='Analytic Account')
+    commitment_date = fields.Datetime('Delivery Date',
+                    states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
+                    copy=False, readonly=True,
+                    help="This is the delivery date promised to the customer. "
+                         "If set, the delivery order will be scheduled based on "
+                         "this date rather than product lead times.")
     def _get_invoiced(self):
         for rec in self:
             rec.invoice_count = len(rec.invoice_ids.ids)
@@ -104,6 +110,7 @@ class SaleReturn(models.Model):
         self.user_id = self.sale_id.user_id.id
         self.team_id = self.sale_id.team_id.id
         self.company_id = self.sale_id.company_id.id
+        self.analytic_account_id = self.sale_id.analytic_account_id.id
         self.commitment_date = self.sale_id.commitment_date
         self.client_order_ref = self.sale_id.client_order_ref
         for line in self.sale_id.order_line:
@@ -116,7 +123,6 @@ class SaleReturn(models.Model):
                 'tax_id': [(6, 0, line.tax_id.ids)],
             }
             lines.append((0, 0, values))
-        print(lines)
         self.order_line = None
         self.order_line = lines
         #
@@ -143,6 +149,7 @@ class SaleReturn(models.Model):
         for order_line in self.order_line:
             vals = {
                 'product_id': order_line.product_id.id,
+                'analytic_account_id': self.analytic_account_id.id,
                 'quantity': order_line.product_uom_qty if self.amount_total >= 0 else -order_line.product_uom_qty,
                 'discount': order_line.discount,
                 'price_unit': order_line.price_unit,
@@ -342,7 +349,7 @@ class SaleReturn(models.Model):
         picking_id = self.env["stock.picking"].create({
             'partner_id': self.partner_id.id,
             'origin': self.name,
-            'scheduled_date': fields.Date.today(),
+            'scheduled_date': self.commitment_date if self.commitment_date else fields.Date.today(),
             'picking_type_id': self.env['stock.picking.type'].search([('code', '=', 'incoming')])[0].id,
             'location_dest_id': self.warehouse_id.lot_stock_id.id,
             'location_id': self.env['stock.location'].search([('usage', '=', 'customer')])[0].id,
@@ -357,7 +364,10 @@ class SaleReturn(models.Model):
                 'location_id': self.env['stock.location'].search([('usage', '=', 'customer')])[0].id,
                 'product_uom': line.product_id.uom_id.id,
             })
+            picking_id.scheduled_date = self.commitment_date if self.commitment_date else fields.Date.today()
             picking_id.action_confirm()
+            picking_id.action_assign()
+
         self.picking_ids = [(6, 0, [picking_id.id])]
 
     def action_view_receipt(self):

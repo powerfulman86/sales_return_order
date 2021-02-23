@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--    <record id="action_net_report" model="ir.actions.act_window">-->
+<!--        <field name="name">Sales Net Analysis</field>-->
+<!--        <field name="res_model">sale.net.report</field>-->
+<!--        <field name="view_mode">graph,pivot</field>-->
+<!--        <field name="view_id"></field>  &lt;!&ndash; force empty &ndash;&gt;-->
+<!--        <field name="help">This report performs analysis on your Sales Net.</field>-->
+<!--    </record>-->
+<!--     <menuitem id="sale_net_report"-->
+<!--              name="Sales Net Report"-->
+<!--              action="action_net_report"-->
+<!--              parent="sale.menu_sale_report"-->
+<!--              sequence="2"/>-->
+</odoo>

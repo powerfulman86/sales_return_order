@@ -54,7 +54,7 @@ class SaleReturn(models.Model):
                                 states={'draft': [('readonly', False)]}, )
 
     create_date = fields.Datetime(string='Creation Date', readonly=True, index=True,
-                                  help="Date on which sales order is created.")
+                                  help="Date on which return order is created.")
     credit_note_done = fields.Boolean()
     picking_delivered = fields.Boolean(compute="_compute_picking_ids")
 
@@ -79,13 +79,9 @@ class SaleReturn(models.Model):
             rec.invoice_count = len(rec.invoice_ids.ids)
 
     invoice_count = fields.Integer(string='Invoice Count', readonly=True)
-    invoice_ids = fields.Many2many("account.move", string='Invoices', readonly=True,
-                                   copy=False)
-
+    invoice_ids = fields.Many2many("account.move", string='Invoices', readonly=True,copy=False)
     note = fields.Text('Terms and conditions')
-
-    amount_untaxed = fields.Float(string='Untaxed Amount', store=True, readonly=True, compute='_amount_all',
-                                  tracking=5)
+    amount_untaxed = fields.Float(string='Untaxed Amount', store=True, readonly=True, compute='_amount_all',tracking=5)
     amount_tax = fields.Float(string='Taxes', store=True, readonly=True, compute='_amount_all')
     amount_total = fields.Float(string='Total', store=True, readonly=True, compute='_amount_all', tracking=4)
 
@@ -97,10 +93,6 @@ class SaleReturn(models.Model):
         'crm.team', 'Sales Team',
         change_default=True, default=_get_default_team, check_company=True,  # Unrequired company
         domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]")
-
-
-    company_id = fields.Many2one('res.company', default=lambda self: self.env.company)
-
 
     type_name = fields.Char('Type Name')
 

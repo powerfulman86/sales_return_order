@@ -18,22 +18,25 @@ class SaleNetProductDetailReport(models.Model):
     product_uom_qty = fields.Float('Qty Ordered', readonly=True)
     partner_id = fields.Many2one('res.partner', 'Customer', readonly=True)
     company_id = fields.Many2one('res.company', 'Company', readonly=True)
+    user_id = fields.Many2one('res.users', 'Salesperson', readonly=True)
     price_total = fields.Float('Total', readonly=True)
     price_subtotal = fields.Float('Untaxed Total', readonly=True)
     product_tmpl_id = fields.Many2one('product.template', 'Product', readonly=True)
     categ_id = fields.Many2one('product.category', 'Product Category', readonly=True)
+    nbr = fields.Integer('# of Lines', readonly=True)
     state = fields.Selection([
         ('draft', 'Draft'),
         ('sale', 'Order'),
         ('done', 'Done'),
         ('cancel', 'Cancelled'),
     ], string='Status', readonly=True)
-    trans_type = fields.Selection([
-        ('Sales Order', 'Sales Order'),
-        ('Return Order', 'Return Order')
-    ], string='Transaction Type', readonly=True)
+    # trans_type = fields.Selection([
+    #     ('Sales Order', 'Sales Order'),
+    #     ('Return Order', 'Return Order')
+    # ], string='Transaction Type', readonly=True)
     discount = fields.Float('Discount %', readonly=True)
     discount_amount = fields.Float('Discount Amount', readonly=True)
+    order_id = fields.Integer('Order #', readonly=True)
 
     def _query(self, with_clause='', fields={}, groupby='', from_clause=''):
         with_ = ("WITH %s" % with_clause) if with_clause else ""
@@ -45,15 +48,16 @@ class SaleNetProductDetailReport(models.Model):
             round(sum(l.product_uom_qty / u.factor * u2.factor),3) as product_uom_qty, 
             sum(l.price_total) as price_total,
             sum(l.price_subtotal)  as price_subtotal, 
+            count(*) as nbr,
             s.name as name,
-            s.date_order as date,
-			'Sales Order' as trans_type,
+            s.date_order as date, 
             s.state as state,
             s.partner_id as partner_id,
             t.categ_id as categ_id,
             p.product_tmpl_id,
             l.discount as discount,
-            round(sum((l.price_unit * l.discount / 100.0 )),3) as discount_amount
+            round(sum((l.price_unit * l.discount / 100.0 )),3) as discount_amount,	 
+            s.id as order_id 
         """
 
         for field in fields.values():
@@ -76,30 +80,32 @@ class SaleNetProductDetailReport(models.Model):
             t.uom_id,
             t.categ_id,
             s.name,
-            s.date_order,
-            trans_type,
+            s.date_order, 
             s.partner_id,
             s.state,
             p.product_tmpl_id,
-            l.discount %s
+            l.discount,
+            s.id %s 
         """ % groupby
 
         select2_ = """
                     min(l.id) as id,
                     l.product_id as product_id,
                     t.uom_id as product_uom,
-                    round(sum(l.product_uom_qty / u.factor * u2.factor),3) *-1 as product_uom_qty, 
-                    sum(l.price_total)*-1 as price_total,
-                    sum(l.price_subtotal)*-1  as price_subtotal, 
+                    round(sum(l.product_uom_qty / u.factor * u2.factor),3) as product_uom_qty, 
+                    sum(l.price_total) as price_total,
+                    sum(l.price_subtotal)  as price_subtotal, 
+        			count(*) as nbr,
                     s.name as name,
                     s.date_order as date,
-        			'Return Order' as trans_type,
+                    'Sales Return' as transtype, 
                     s.state as state,
                     s.partner_id as partner_id,
                     t.categ_id as categ_id,
                     p.product_tmpl_id,
                     l.discount as discount,
-                    round(sum((l.price_unit * l.discount / 100.0 )),3) as discount_amount
+                    round(sum((l.price_unit * l.discount / 100.0 )),3) as discount_amount,	
+                    s.id as order_id 
                 """
 
         for field in fields.values():
@@ -122,12 +128,13 @@ class SaleNetProductDetailReport(models.Model):
                     t.uom_id,
                     t.categ_id,
                     s.name,
-                    s.date_order,
-                    trans_type,
+                    s.date_order, 
                     s.partner_id,
                     s.state,
                     p.product_tmpl_id,
-                    l.discount %s
+                    l.discount,
+                     s.id %s
+                    
                 """ % groupby
 
         return '%s (SELECT %s FROM %s WHERE l.product_id IS NOT NULL GROUP BY %s Union SELECT %s FROM %s WHERE ' \

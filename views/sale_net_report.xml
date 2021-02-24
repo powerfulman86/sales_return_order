@@ -1,15 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-<!--    <record id="action_net_report" model="ir.actions.act_window">-->
-<!--        <field name="name">Sales Net Analysis</field>-->
-<!--        <field name="res_model">sale.net.report</field>-->
-<!--        <field name="view_mode">graph,pivot</field>-->
-<!--        <field name="view_id"></field>  &lt;!&ndash; force empty &ndash;&gt;-->
-<!--        <field name="help">This report performs analysis on your Sales Net.</field>-->
-<!--    </record>-->
-<!--     <menuitem id="sale_net_report"-->
-<!--              name="Sales Net Report"-->
-<!--              action="action_net_report"-->
-<!--              parent="sale.menu_sale_report"-->
-<!--              sequence="2"/>-->
+    <record id="view_sale_net_pivot" model="ir.ui.view">
+        <field name="name">sale.net.report.pivot</field>
+        <field name="model">sale.net.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Sales Net Analysis" disable_linking="True">
+                <field name="categ_id" type="row"/>
+                <field name="date" interval="month" type="col"/>
+                <field name="price_subtotal" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_sale_net_graph" model="ir.ui.view">
+        <field name="name">sale.net.report.graph</field>
+        <field name="model">sale.net.report</field>
+        <field name="arch" type="xml">
+            <graph string="Sales Net Analysis" type="line">
+                <field name="date" type="row" interval="day"/>
+                <field name="price_subtotal" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_sale_net_search" model="ir.ui.view">
+        <field name="name">sale.net.report.search</field>
+        <field name="model">sale.net.report</field>
+        <field name="arch" type="xml">
+            <search string="Sales Net Analysis">
+                <field name="date"/>
+                <filter string="Date" name="year" invisible="1" date="date" default_period="this_year"/>
+                <separator/>
+                <field name="product_id"/>
+                <field name="categ_id"/>
+                <field name="partner_id"/>
+                <group expand="0" string="Extended Filters">
+                    <field name="categ_id" filter_domain="[('categ_id', 'child_of', self)]"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </group>
+                <group expand="1" string="Group By">
+                    <filter string="Customer" name="Customer" context="{'group_by':'partner_id'}"/>
+                    <filter string="Product" name="Product" context="{'group_by':'product_id'}"/>
+                    <filter string="Product Category" name="Category" context="{'group_by':'categ_id'}"/>
+                    <filter name="Transaction Type" string="Transaction Type" context="{'group_by':'trans_type'}"/>
+                    <filter string="Company" name="company" groups="base.group_multi_company"
+                            context="{'group_by':'company_id'}"/>
+                    <separator/>
+                    <filter string="Order Date" name="date" context="{'group_by':'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sales_net_report" model="ir.actions.act_window">
+        <field name="name">Sales Net Analysis</field>
+        <field name="res_model">sale.net.report</field>
+        <field name="view_mode">graph,pivot</field>
+        <field name="view_id"></field>  <!-- force empty -->
+        <field name="help">This report performs analysis on your Sales Net.</field>
+    </record>
+
+     <menuitem id="sale_product_net_report"
+              name="Sales Net Report"
+              action="action_sales_net_report"
+              parent="sale.menu_sale_report"
+              sequence="3"/>
 </odoo>

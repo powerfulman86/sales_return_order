@@ -72,7 +72,13 @@ class SaleReturn(models.Model):
     order_line = fields.One2many('sale.return.line', 'order_id', string='Order Lines',
                                  states={'cancel': [('readonly', True)], 'done': [('readonly', True)]}, copy=True,
                                  auto_join=True)
-    company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company)
+
+    def _default_company_id(self):
+        if self.env.user.company_id:
+            return self.env.user.company_id.id
+        return self.env['res.company'].search([], limit=1)
+
+    company_id = fields.Many2one('res.company', string='Company', required=True, default=_default_company_id)
     analytic_account_id = fields.Many2one('account.analytic.account', string='Analytic Account')
     commitment_date = fields.Datetime('Delivery Date',
                     states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
@@ -80,6 +86,7 @@ class SaleReturn(models.Model):
                     help="This is the delivery date promised to the customer. "
                          "If set, the delivery order will be scheduled based on "
                          "this date rather than product lead times.")
+
     def _get_invoiced(self):
         for rec in self:
             rec.invoice_count = len(rec.invoice_ids.ids)
@@ -186,11 +193,26 @@ class SaleReturn(models.Model):
         }
         return result
 
+    @api.onchange('company_id')
+    def _onchange_company_id(self):
+        if self.company_id:
+            warehouse_id = self.env['ir.default'].get_model_defaults('sale.order').get('warehouse_id')
+            self.warehouse_id = warehouse_id or self.env['stock.warehouse'].search(
+                [('company_id', '=', self.company_id.id)], limit=1)
+
     @api.model
     def _default_warehouse_id(self):
-        company = self.env.user.company_id.id
         warehouse_ids = self.env['stock.warehouse'].search([], limit=1)
         return warehouse_ids
+
+    # @api.model
+    # def _default_warehouse_id(self):
+    #     company = self.env.company.id
+    #     warehouse_ids = self.env['stock.warehouse'].search([('company_id', '=', company)], limit=1)
+    #     return warehouse_ids
+        # company = self.env.user.company_id.id
+        # warehouse_ids = self.env['stock.warehouse'].search([], limit=1)
+        # return warehouse_ids
 
     warehouse_id = fields.Many2one(
         'stock.warehouse', string='Warehouse',
@@ -231,8 +253,10 @@ class SaleReturn(models.Model):
             else:
                 vals['name'] = self.env['ir.sequence'].next_by_code('sale.return', sequence_date=seq_date) or _('New')
 
-        result = super(SaleReturn, self).create(vals)
-        return result
+        if 'warehouse_id' not in vals and 'company_id' in vals and vals.get('company_id') != self.env.company.id:
+            vals['warehouse_id'] = self.env['stock.warehouse'].search([('company_id', '=', vals.get('company_id'))], limit=1).id
+
+        return super(SaleReturn, self).create(vals)
 
     def name_get(self):
         if self._context.get('sale_show_partner_name'):

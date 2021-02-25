@@ -18,7 +18,7 @@ class SaleReturn(models.Model):
     _name = 'sale.return'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin', 'utm.mixin']
     _description = "Sales Return"
-    _order = 'date_order desc, id desc'
+    _order = 'id desc'
 
     @api.depends('order_line.price_total')
     def _amount_all(self):
@@ -61,24 +61,26 @@ class SaleReturn(models.Model):
     user_id = fields.Many2one(
         'res.users', string='Salesperson', index=True, tracking=2, default=lambda self: self.env.user,
         domain=lambda self: [('groups_id', 'in', self.env.ref('sales_team.group_sale_salesman').id)])
-    partner_id = fields.Many2one(
-        'res.partner', string='Customer', readonly=True,
-        states={'draft': [('readonly', False)]},
-        required=True, change_default=True, index=True, tracking=1,
-        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]", )
 
-    sale_id = fields.Many2one("sale.order", string="Sale Order")
+    def _default_sale_id(self):
+        return  self.env['sale.order'].search([], limit=1)
+
+    sale_id = fields.Many2one("sale.order", string="Sale Order", )
 
     order_line = fields.One2many('sale.return.line', 'order_id', string='Order Lines',
                                  states={'cancel': [('readonly', True)], 'done': [('readonly', True)]}, copy=True,
                                  auto_join=True)
 
     def _default_company_id(self):
-        if self.env.user.company_id:
-            return self.env.user.company_id.id
         return self.env['res.company'].search([], limit=1)
 
     company_id = fields.Many2one('res.company', string='Company', required=True, default=_default_company_id)
+    partner_id = fields.Many2one(
+        'res.partner', string='Customer', readonly=True,
+        states={'draft': [('readonly', False)]},
+        required=True, change_default=True, index=True, tracking=1,
+        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]", )
+
     analytic_account_id = fields.Many2one('account.analytic.account', string='Analytic Account')
     commitment_date = fields.Datetime('Delivery Date',
                     states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
@@ -100,7 +102,7 @@ class SaleReturn(models.Model):
 
     @api.model
     def _get_default_team(self):
-        return self.env['crm.team']._get_default_team_id()
+        return self.env['crm.team'].search([], limit=1)
 
     team_id = fields.Many2one(
         'crm.team', 'Sales Team',
@@ -111,38 +113,39 @@ class SaleReturn(models.Model):
 
     @api.onchange('sale_id')
     def change_sale_id(self):
-        lines = []
-        self.partner_id = self.sale_id.partner_id.id
-        self.warehouse_id = self.sale_id.warehouse_id.id
-        self.user_id = self.sale_id.user_id.id
-        self.team_id = self.sale_id.team_id.id
-        self.company_id = self.sale_id.company_id.id
-        self.analytic_account_id = self.sale_id.analytic_account_id.id
-        self.commitment_date = self.sale_id.commitment_date
-        self.client_order_ref = self.sale_id.client_order_ref
-        for line in self.sale_id.order_line:
-            values = {
-                'product_id': line.product_id.id,
-                'name': line.name,
-                'product_uom_qty': line.product_uom_qty,
-                'product_uom': line.product_uom.id,
-                'price_unit': line.price_unit,
-                'tax_id': [(6, 0, line.tax_id.ids)],
-            }
-            lines.append((0, 0, values))
-        self.order_line = None
-        self.order_line = lines
-        #
-        # lines = []
-        # for val in self.sale_order_id.order_line:
-        #     lines.append((0, 0,
-        #                   {   'product_id': val.product_id.id, 'qty': val.product_uom_qty }
-        #                   ))
-        #
-        # self.delivery_order_lines = None
-        # self.delivery_order_lines = lines
+        if self.sale_id:
+            lines = []
+            self.partner_id = self.sale_id.partner_id.id
+            self.warehouse_id = self.sale_id.warehouse_id.id
+            self.user_id = self.sale_id.user_id.id
+            self.team_id = self.sale_id.team_id.id
+            self.company_id = self.sale_id.company_id.id
+            self.analytic_account_id = self.sale_id.analytic_account_id.id
+            self.commitment_date = self.sale_id.commitment_date
+            self.client_order_ref = self.sale_id.client_order_ref
+            for line in self.sale_id.order_line:
+                values = {
+                    'product_id': line.product_id.id,
+                    'name': line.name,
+                    'product_uom_qty': line.product_uom_qty,
+                    'product_uom': line.product_uom.id,
+                    'price_unit': line.price_unit,
+                    'tax_id': [(6, 0, line.tax_id.ids)],
+                }
+                lines.append((0, 0, values))
+            self.order_line = None
+            self.order_line = lines
+            #
+            # lines = []
+            # for val in self.sale_order_id.order_line:
+            #     lines.append((0, 0,
+            #                   {   'product_id': val.product_id.id, 'qty': val.product_uom_qty }
+            #                   ))
+            #
+            # self.delivery_order_lines = None
+            # self.delivery_order_lines = lines
 
-        # self.order_line = lines
+            # self.order_line = lines
 
     def create_credit_note(self):
         self.ensure_one()
@@ -200,9 +203,13 @@ class SaleReturn(models.Model):
             self.warehouse_id = warehouse_id or self.env['stock.warehouse'].search(
                 [('company_id', '=', self.company_id.id)], limit=1)
 
+
+
     @api.model
     def _default_warehouse_id(self):
-        warehouse_ids = self.env['stock.warehouse'].search([], limit=1)
+        company = self.env.company.id
+        print(">>>>>>>>>>>>>>>>>>>   ", company)
+        warehouse_ids = self.env['stock.warehouse'].search([('company_id', '=', company)], limit=1)
         return warehouse_ids
 
     # @api.model

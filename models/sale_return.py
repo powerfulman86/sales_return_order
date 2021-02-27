@@ -71,10 +71,7 @@ class SaleReturn(models.Model):
                                  states={'cancel': [('readonly', True)], 'done': [('readonly', True)]}, copy=True,
                                  auto_join=True)
 
-    def _default_company_id(self):
-        return self.env['res.company'].search([], limit=1)
-
-    company_id = fields.Many2one('res.company', string='Company', required=True, default=_default_company_id)
+    company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company)
     partner_id = fields.Many2one(
         'res.partner', string='Customer', readonly=True,
         states={'draft': [('readonly', False)]},
@@ -123,6 +120,7 @@ class SaleReturn(models.Model):
             self.analytic_account_id = self.sale_id.analytic_account_id.id
             self.commitment_date = self.sale_id.commitment_date
             self.client_order_ref = self.sale_id.client_order_ref
+            self.validity_date = self.sale_id.validity_date
             for line in self.sale_id.order_line:
                 values = {
                     'product_id': line.product_id.id,

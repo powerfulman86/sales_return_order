@@ -85,11 +85,11 @@
                             <group>
                                 <field name="validity_date"
                                        attrs="{'invisible': [('state', 'in', ['return', 'done'])]}"/>
-                                <div class="o_td_label" groups="base.group_no_one"
+                                <div class="o_td_label"
                                      attrs="{'invisible': [('state', 'in', ['return', 'done', 'cancel'])]}">
                                     <label for="date_order" string="Request Date"/>
                                 </div>
-                                <field name="date_order" nolabel="1" groups="base.group_no_one"
+                                <field name="date_order" nolabel="1"
                                        attrs="{'invisible': [('state', 'in', ['return', 'done', 'cancel'])]}"/>
                                 <div class="o_td_label" attrs="{'invisible': [('state', 'in', ['draft', 'sent'])]}">
                                     <label for="date_order" string="Order Date"/>
@@ -159,11 +159,12 @@
                                                 optional="show"
                                         />
                                         <field name="price_unit"/>
+                                        <field name="company_id" invisible="1"/>
                                         <field
                                                 name="tax_id"
                                                 widget="many2many_tags"
                                                 options="{'no_create': True}"
-                                                domain="[('type_tax_use','=','return'),('company_id','=',parent.company_id)]"
+                                                domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]"
                                                 optional="show"
                                         />
                                         <field name="discount" string="Disc.%"

@@ -1,0 +1,1022 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sales_return_order
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-07 03:09+0000\n"
+"PO-Revision-Date: 2021-04-07 03:09+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__nbr
+msgid "# of Lines"
+msgstr "عدد السطور"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__access_warning
+msgid "Access warning"
+msgstr "تنبيه الوصول"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__message_needaction
+msgid "Action Needed"
+msgstr "مطلوب تنفيذ"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__activity_ids
+msgid "Activities"
+msgstr "الانشطة"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__activity_state
+msgid "Activity State"
+msgstr "حالة النشاط"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report__analytic_account_id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__analytic_account_id
+msgid "Analytic Account"
+msgstr "حساب تحليلي"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__message_attachment_count
+msgid "Attachment Count"
+msgstr "عدد المرفقات"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__campaign_id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__campaign_id
+msgid "Campaign"
+msgstr "حملة اعلانية"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__product_updatable
+msgid "Can Edit Product"
+msgstr "يمكن تعديل الصنف"
+
+#. module: sales_return_order
+#: code:addons/sales_return_order/models/sale_return.py:0
+#, python-format
+msgid "Can not return Quantity more than [ %s ] sold for product [ %s ]"
+msgstr "لا يمكن عمل مرتجع بكمية اكبر من الكمية المباعه"
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "Cancel"
+msgstr "الغاء"
+
+#. module: sales_return_order
+#: model:ir.model.fields.selection,name:sales_return_order.selection__sale_net_report__state__cancel
+#: model:ir.model.fields.selection,name:sales_return_order.selection__sale_return__state__cancel
+#: model:ir.model.fields.selection,name:sales_return_order.selection__sale_return_report__state__cancel
+msgid "Cancelled"
+msgstr "تم الالغاء"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__product_uom_category_id
+msgid "Category"
+msgstr "الفئة"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report__company_id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__company_id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__company_id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__company_id
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_return_product_search
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_sale_net_search
+msgid "Company"
+msgstr "الشركة"
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "Confirm"
+msgstr "تاكيد"
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return_line__product_uom_category_id
+msgid ""
+"Conversion between Units of Measure can only occur if they belong to the "
+"same category. The conversion will be made based on the ratios."
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "Create Credit Note"
+msgstr "انشاء مرتجع نقدي"
+
+#. module: sales_return_order
+#: model_terms:ir.actions.act_window,help:sales_return_order.action_quotations_sale_return
+msgid "Create a new Request, the first step of a new return!"
+msgstr "انشاء طلب جديد , اول خطوة لتسجيل مرتجع !"
+
+#. module: sales_return_order
+#: model_terms:ir.actions.act_window,help:sales_return_order.action_return_orders
+msgid "Create a new quotation, the first step of a new return!"
+msgstr "انشاء طلب جديد , اول خطوة لتسجيل مرتجع !"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__create_uid
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__create_uid
+msgid "Created by"
+msgstr "انشئ بواسطة"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__create_date
+msgid "Created on"
+msgstr "انشئ في"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__create_date
+msgid "Creation Date"
+msgstr "تاريخ الانشاء"
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__date_order
+msgid ""
+"Creation date of draft/sent orders,\n"
+"Confirmation date of confirmed orders."
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__move_ids
+msgid "Credit"
+msgstr "دائن"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__credit_note_done
+msgid "Credit Note Done"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "Credit Notes"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__credit_note_count
+msgid "Credit notes"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report__partner_id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__partner_id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__order_partner_id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__partner_id
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_return_product_search
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_sale_net_search
+msgid "Customer"
+msgstr "عميل"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__country_id
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_return_product_search
+msgid "Customer Country"
+msgstr "بلد العميل"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__commercial_partner_id
+msgid "Customer Entity"
+msgstr "كيان العميل"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__industry_id
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_return_product_search
+msgid "Customer Industry"
+msgstr "صناعة العميل"
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__access_url
+msgid "Customer Portal URL"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__client_order_ref
+msgid "Customer Reference"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_return_product_search
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_sale_net_search
+msgid "Date"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__create_date
+msgid "Date on which return order is created."
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__commitment_date
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "Delivery Date"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__name
+msgid "Description"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "Disc.%"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report__discount
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__discount
+msgid "Discount %"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__discount
+msgid "Discount (%)"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report__discount_amount
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__discount_amount
+msgid "Discount Amount"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_report_sale_return_report_saleproforma__display_name
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report__display_name
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report_saleproforma__display_name
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__display_name
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__display_name
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields.selection,name:sales_return_order.selection__sale_net_report__state__done
+msgid "Done"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields.selection,name:sales_return_order.selection__sale_net_report__state__draft
+msgid "Draft"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields.selection,name:sales_return_order.selection__sale_return_report__state__draft
+msgid "Draft Quotation"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__validity_date
+msgid "Expiration"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_return_product_search
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_sale_net_search
+msgid "Extended Filters"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__message_channel_ids
+msgid "Followers (Channels)"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__weight
+msgid "Gross Weight"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_return_product_search
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_sale_net_search
+msgid "Group By"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_report_sale_return_report_saleproforma__id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report__id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report_saleproforma__id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__id
+msgid "ID"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__message_needaction
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__message_unread
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__message_has_error
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__invoice_count
+msgid "Invoice Count"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__invoice_lines
+msgid "Invoice Lines"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__invoice_ids
+msgid "Invoices"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "Invoicing"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: sales_return_order
+#: code:addons/sales_return_order/models/sale_return.py:0
+#, python-format
+msgid "It is not allowed to confirm an order in the following states: %s"
+msgstr "غير مسموح بتأكيد أمر في الحالة التالية: %s"
+
+#. module: sales_return_order
+#: model:ir.model,name:sales_return_order.model_account_move
+msgid "Journal Entries"
+msgstr "القيود اليومية"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_report_sale_return_report_saleproforma____last_update
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report____last_update
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report_saleproforma____last_update
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return____last_update
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line____last_update
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__write_uid
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__write_date
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields.selection,name:sales_return_order.selection__sale_return__state__done
+msgid "Locked"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__message_main_attachment_id
+msgid "Main Attachment"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__medium_id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__medium_id
+msgid "Medium"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: sales_return_order
+#: code:addons/sales_return_order/models/sale_return.py:0
+#: code:addons/sales_return_order/models/sale_return.py:0
+#: code:addons/sales_return_order/models/sale_return.py:0
+#: code:addons/sales_return_order/models/sale_return.py:0
+#, python-format
+msgid "New"
+msgstr "جديد"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_account_move__new_return_id
+#: model:ir.model.fields,field_description:sales_return_order.field_stock_picking__new_return_id
+msgid "New Return"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__message_unread_counter
+msgid "Number of unread messages"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.actions.act_window,help:sales_return_order.action_quotations_sale_return
+msgid ""
+"Once the quotation is confirmed by the customer, it becomes a Sales Return.<br> You will be able to\n"
+"                create an credit note and refund the payment."
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.actions.act_window,help:sales_return_order.action_return_orders
+msgid ""
+"Once the quotation is confirmed, it becomes a Sales Return.<br> You will be able to create an credit\n"
+"                note\n"
+"                and refund the payment."
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields.selection,name:sales_return_order.selection__sale_net_report__state__sale
+msgid "Order"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__order_id
+msgid "Order #"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report__date
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__date_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__date
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_tree
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_return_product_search
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_sale_net_search
+msgid "Order Date"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__order_line
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "Order Lines"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report__name
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__name
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__order_id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__name
+msgid "Order Reference"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "Other Info"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__reference
+msgid "Payment Ref."
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__picking_delivered
+msgid "Picking Delivered"
+msgstr ""
+
+#. module: sales_return_order
+#: code:addons/sales_return_order/models/sale_return.py:0
+#, python-format
+msgid "Please define an accounting sales journal for the company %s (%s)."
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__access_url
+msgid "Portal Access URL"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report__product_tmpl_id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__product_id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__product_tmpl_id
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_return_product_search
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_sale_net_search
+msgid "Product"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report__categ_id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__categ_id
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_return_product_search
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_sale_net_search
+msgid "Product Category"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__product_template_id
+msgid "Product Template"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report__product_id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__product_id
+msgid "Product Variant"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model,name:sales_return_order.model_report_sale_return_report_saleproforma
+#: model:ir.model,name:sales_return_order.model_sale_net_report_saleproforma
+msgid "Proforma Report"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report__product_uom_qty
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__product_uom_qty
+msgid "Qty Ordered"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__product_uom_qty
+msgid "Quantity"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "Quantity:"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields.selection,name:sales_return_order.selection__sale_return__state__draft
+msgid "Quotation"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "Receipt"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "Receipt Date"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__receipts_count
+msgid "Receipt Orders"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__origin
+msgid "Reference of the document that generated this Return order request."
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_return_product_search
+msgid "Request"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "Request Date"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.ui.menu,name:sales_return_order.sales_return_root
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "Return"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields.selection,name:sales_return_order.selection__sale_return_report__state__done
+msgid "Return Done"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_tree
+msgid "Return Number"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields.selection,name:sales_return_order.selection__sale_net_report__trans_type__return_order
+#: model:ir.model.fields.selection,name:sales_return_order.selection__sale_return__state__return
+#: model:ir.model.fields.selection,name:sales_return_order.selection__sale_return_report__state__sale
+msgid "Return Order"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.ui.menu,name:sales_return_order.return_quotation_menu
+msgid "Return Request"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.actions.act_window,name:sales_return_order.action_quotations_sale_return
+msgid "Return Requests"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model,name:sales_return_order.model_sale_return_line
+msgid "Rrturn Order Line"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__sale_id
+msgid "Sale Order"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.actions.act_window,name:sales_return_order.action_sales_net_report
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_sale_net_graph
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_sale_net_pivot
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_sale_net_search
+msgid "Sales Net Analysis"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model,name:sales_return_order.model_sale_net_report
+msgid "Sales Net Analysis Report"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.ui.menu,name:sales_return_order.sale_product_net_report
+msgid "Sales Net Report"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields.selection,name:sales_return_order.selection__sale_net_report__trans_type__sales_order
+msgid "Sales Order"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model,name:sales_return_order.model_sale_return
+#: model:ir.ui.menu,name:sales_return_order.return_order_menu
+#: model:ir.ui.menu,name:sales_return_order.sale_return_report_all
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_tree
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_return_product_search
+msgid "Sales Return"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.actions.act_window,name:sales_return_order.action_return_report_all
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_return_product_graph
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_return_product_pivot
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_return_product_search
+msgid "Sales Return Analysis"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model,name:sales_return_order.model_sale_return_report
+msgid "Sales Return Analysis Report"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "Sales Return Lines"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.actions.act_window,name:sales_return_order.action_return_orders
+msgid "Sales Returns"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__team_id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__team_id
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_return_product_search
+msgid "Sales Team"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__user_id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__user_id
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_return_product_search
+msgid "Salesperson"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__access_token
+msgid "Security Token"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "Set to Request"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__source_id
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__source_id
+msgid "Source"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__origin
+msgid "Source Document"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report__state
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__state
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__state
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_return_product_search
+msgid "Status"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__price_subtotal
+msgid "Subtotal"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_tree
+msgid "Tax Total"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__amount_tax
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__tax_id
+msgid "Taxes"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__note
+msgid "Terms and conditions"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "Terms and conditions..."
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__reference
+msgid "The payment communication of this sale order."
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__campaign_id
+msgid ""
+"This is a name that helps you keep track of your different campaign efforts,"
+" e.g. Fall_Drive, Christmas_Special"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__commitment_date
+msgid ""
+"This is the delivery date promised to the customer. If set, the delivery "
+"order will be scheduled based on this date rather than product lead times."
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__medium_id
+msgid "This is the method of delivery, e.g. Postcard, Email, or Banner Ad"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__source_id
+msgid ""
+"This is the source of the link, e.g. Search Engine, another domain, or name "
+"of email list"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.actions.act_window,help:sales_return_order.action_sales_net_report
+msgid "This report performs analysis on your Sales Net."
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.actions.act_window,help:sales_return_order.action_return_report_all
+msgid "This report performs analysis on your Sales Return Transaction."
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report__price_total
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__amount_total
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__price_total
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__price_total
+msgid "Total"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__price_tax
+msgid "Total Tax"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_tree
+msgid "Total Tax Excluded"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_tree
+msgid "Total Tax Included"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report__trans_type
+#: model_terms:ir.ui.view,arch_db:sales_return_order.view_sale_net_search
+msgid "Transaction Type"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model,name:sales_return_order.model_stock_picking
+msgid "Transfer"
+msgstr "الشحنة"
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__picking_ids
+msgid "Transfers"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__type_name
+msgid "Type Name"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__price_unit
+msgid "Unit Price"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "Unit Price:"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report__product_uom
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_line__product_uom
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__product_uom
+msgid "Unit of Measure"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__message_unread
+msgid "Unread Messages"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__amount_untaxed
+msgid "Untaxed Amount"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__untaxed_amount_invoiced
+msgid "Untaxed Amount Invoiced"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__untaxed_amount_to_invoice
+msgid "Untaxed Amount To Invoice"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_net_report__price_subtotal
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__price_subtotal
+msgid "Untaxed Total"
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "UoM"
+msgstr ""
+
+#. module: sales_return_order
+#: code:addons/sales_return_order/models/sale_return.py:0
+#: code:addons/sales_return_order/models/sale_return.py:0
+#, python-format
+msgid "View Credit Note"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return_report__volume
+msgid "Volume"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__warehouse_id
+msgid "Warehouse"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,field_description:sales_return_order.field_sale_return__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: sales_return_order
+#: model:ir.model.fields,help:sales_return_order.field_sale_return__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: sales_return_order
+#: code:addons/sales_return_order/models/sale_return.py:0
+#, python-format
+msgid ""
+"You can not delete a sent quotation or a confirmed return order. You must "
+"first cancel it."
+msgstr ""
+
+#. module: sales_return_order
+#: model_terms:ir.ui.view,arch_db:sales_return_order.sale_return_view_form
+msgid "receive products"
+msgstr ""

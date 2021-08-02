@@ -52,15 +52,26 @@
         </field>
     </record>
 
+    <record id="sales_net_report_dashboard_view" model="ir.ui.view">
+        <field name="name">pSales Net Analysis</field>
+        <field name="model">sale.net.report</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <dashboard>
+                <view type="graph" ref="view_sale_net_graph"/>
+                <view type="pivot" ref="view_sale_net_pivot"/>
+            </dashboard>
+        </field>
+    </record>
+
     <record id="action_sales_net_report" model="ir.actions.act_window">
         <field name="name">Sales Net Analysis</field>
         <field name="res_model">sale.net.report</field>
-        <field name="view_mode">graph,pivot</field>
-        <field name="view_id"></field>  <!-- force empty -->
+        <field name="view_mode">dashboard</field>
         <field name="help">This report performs analysis on your Sales Net.</field>
     </record>
 
-     <menuitem id="sale_product_net_report"
+    <menuitem id="sale_product_net_report"
               name="Sales Net Report"
               action="action_sales_net_report"
               parent="sale.menu_sale_report"

@@ -135,8 +135,56 @@ class SaleNetReport(models.Model):
                     l.discount %s
                 """ % groupby
 
+        select3_ = """
+                    min(pol.id) as id,
+                    pol.product_id as product_id,
+                    pt.uom_id as product_uom,
+                    round(sum(pol.qty / u.factor * u2.factor),3) *-1 as product_uom_qty, 
+                    sum(pol.price_unit * pol.qty - pol.price_unit * pol.qty / 100 * pol.discount) as price_total,
+                    sum(pol.price_unit * pol.qty - pol.price_unit * pol.qty / 100 * pol.discount)  as price_subtotal, 
+                    po.name as name,
+                    po.date_order as date,
+                    'POS' as trans_type,
+                    po.analytic_account_id as analytic_account_id,
+                    po.state as state,
+                    po.partner_id as partner_id,
+                    pt.categ_id as categ_id,
+                    pp.product_tmpl_id,
+                    pol.discount as discount,
+                    round(sum((pol.price_unit * pol.discount / 100.0 )),3) as discount_amount
+                        """
+
+        for field in fields.values():
+            select3_ += field
+
+        from3_ = """
+                    pos_order_line pol
+                    LEFT JOIN pos_order po ON po.id = pol.order_id
+                    LEFT JOIN product_product pp ON pp.id = pol.product_id
+                    LEFT JOIN product_template pt ON pt.id = pp.product_tmpl_id
+                    left join uom_uom u on (u.id=pol.product_uom_id)
+                    left join uom_uom u2 on (u2.id=pt.uom_id) 
+                    left join res_partner partner on po.partner_id = partner.id
+                    %s
+            """ % from_clause
+
+        groupby3_ = """
+                    pol.product_id,
+                    pt.uom_id, 
+                    po.name,
+                    po.date_order,
+                    po.analytic_account_id,
+                    po.state,
+                    po.partner_id,
+                    pt.categ_id,
+                    pp.product_tmpl_id,
+                    pol.discount %s
+                """ % groupby
+
         return '%s (SELECT %s FROM %s WHERE l.product_id IS NOT NULL GROUP BY %s Union SELECT %s FROM %s WHERE ' \
-               'l.product_id IS NOT NULL GROUP BY %s)' % (with_, select_, from_, groupby_, select2_, from2_, groupby2_)
+               'l.product_id IS NOT NULL GROUP BY %s Union SELECT %s FROM %s WHERE ' \
+               'pol.product_id IS NOT NULL GROUP BY %s)' % (
+               with_, select_, from_, groupby_, select2_, from2_, groupby2_, select3_, from3_, groupby3_)
 
     def init(self):
         # self._table = sale_report

@@ -33,7 +33,6 @@ class SaleNetReport(models.Model):
         ('Sales Order', 'Sales Order'),
         ('Return Order', 'Return Order')
     ], string='Transaction Type', readonly=True)
-    discount = fields.Float('Discount %', readonly=True)
     discount_amount = fields.Float('Discount Amount', readonly=True)
 
     def _query(self, with_clause='', fields={}, groupby='', from_clause=''):
@@ -54,7 +53,6 @@ class SaleNetReport(models.Model):
             s.partner_id as partner_id,
             t.categ_id as categ_id,
             p.product_tmpl_id,
-            l.discount as discount,
             round(sum((l.price_unit * l.discount / 100.0 )),3) as discount_amount
         """
 
@@ -83,8 +81,7 @@ class SaleNetReport(models.Model):
             s.analytic_account_id,
             s.partner_id,
             s.state,
-            p.product_tmpl_id,
-            l.discount %s
+            p.product_tmpl_id %s
         """ % groupby
 
         select2_ = """
@@ -102,7 +99,6 @@ class SaleNetReport(models.Model):
                     s.partner_id as partner_id,
                     t.categ_id as categ_id,
                     p.product_tmpl_id,
-                    l.discount as discount,
                     round(sum((l.price_unit * l.discount / 100.0 )),3) as discount_amount
                 """
 
@@ -131,8 +127,7 @@ class SaleNetReport(models.Model):
                     s.analytic_account_id,
                     s.partner_id,
                     s.state,
-                    p.product_tmpl_id,
-                    l.discount %s
+                    p.product_tmpl_id %s
                 """ % groupby
 
         select3_ = """
@@ -150,8 +145,7 @@ class SaleNetReport(models.Model):
                     po.partner_id as partner_id,
                     pt.categ_id as categ_id,
                     pp.product_tmpl_id,
-                    pol.discount as discount,
-                    round(sum((pol.price_unit * pol.discount / 100.0 )),3) as discount_amount
+                    round(sum((pol.price_unit * pol.discount / 100.0 ) + cast(pol.extra_discount_value as numeric)),3) as discount_amount
                         """
 
         for field in fields.values():
@@ -177,14 +171,13 @@ class SaleNetReport(models.Model):
                     po.state,
                     po.partner_id,
                     pt.categ_id,
-                    pp.product_tmpl_id,
-                    pol.discount %s
+                    pp.product_tmpl_id %s
                 """ % groupby
 
         return '%s (SELECT %s FROM %s WHERE l.product_id IS NOT NULL GROUP BY %s Union SELECT %s FROM %s WHERE ' \
                'l.product_id IS NOT NULL GROUP BY %s Union SELECT %s FROM %s WHERE ' \
                'pol.product_id IS NOT NULL GROUP BY %s)' % (
-               with_, select_, from_, groupby_, select2_, from2_, groupby2_, select3_, from3_, groupby3_)
+                   with_, select_, from_, groupby_, select2_, from2_, groupby2_, select3_, from3_, groupby3_)
 
     def init(self):
         # self._table = sale_report

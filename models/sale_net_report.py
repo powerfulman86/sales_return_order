@@ -31,7 +31,8 @@ class SaleNetReport(models.Model):
     ], string='Status', readonly=True)
     trans_type = fields.Selection([
         ('Sales Order', 'Sales Order'),
-        ('Return Order', 'Return Order')
+        ('Return Order', 'Return Order'),
+        ('POS', 'POS')
     ], string='Transaction Type', readonly=True)
     discount_amount = fields.Float('Discount Amount', readonly=True)
 
@@ -134,7 +135,7 @@ class SaleNetReport(models.Model):
                     min(pol.id) as id,
                     pol.product_id as product_id,
                     pt.uom_id as product_uom,
-                    round(sum(pol.qty / u.factor * u2.factor),3) *-1 as product_uom_qty, 
+                    round(sum(pol.qty / u.factor * u2.factor),3) as product_uom_qty, 
                     sum(pol.price_unit * pol.qty - pol.price_unit * pol.qty / 100 * pol.discount) as price_total,
                     sum(pol.price_unit * pol.qty - pol.price_unit * pol.qty / 100 * pol.discount)  as price_subtotal, 
                     po.name as name,

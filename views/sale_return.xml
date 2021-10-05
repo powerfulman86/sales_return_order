@@ -81,6 +81,7 @@
                                 <!--                                       context="{'default_type':'invoice'}" options='{"always_reload": True}'/>-->
                                 <!--                                <field name="partner_shipping_id" groups="sale.group_delivery_invoice_address"-->
                                 <!--                                       context="{'default_type':'delivery'}" options='{"always_reload": True}'/>-->
+                                <field name="pricelist_id" groups="product.group_product_pricelist" options="{'no_open':True,'no_create': True}"/>
                             </group>
                             <group>
                                 <field name="validity_date"
